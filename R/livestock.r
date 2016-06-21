@@ -33,17 +33,17 @@ d_rho_11 <- function(rho,  parms) {
 
 livestock <- list(
   defparms = list(
-    m = 0.05,
     r = 1,
-    b = 0.6,
+    b = 1,
     K = 1,
-    a = 0.3,
-    h = 50,
-    L = 4,
     alpha = 0,
-    q = 0,
     c = 0,
     f = 0,
+    m = 0.05,
+    a = 0.3,
+    h = 50,
+    L = 5,
+    q = 0,
     v = 0,
     p = 0
   ),
@@ -58,11 +58,11 @@ livestock <- list(
 
   list(c(
     rho_1 = rho_1,
-    rho_11 = rho_11,
+    rho_11 = rho_11#,
     #changes of other pairs and singletons are not calculated
-    rho_10 = 0,
-    rho_00 = 0,
-    rho_0 = 1-rho_1
+    #rho_10 = 0,
+    #rho_00 = 0,
+    #rho_0 = 1-rho_1
   )  )
 }
 )
