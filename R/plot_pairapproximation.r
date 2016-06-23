@@ -13,7 +13,7 @@
 #' @export
 #' @examples
 #'
-#' p <- set_parms(livestock$defparms, set = list(b = 0.2, f = 0.9, p = 0.8))
+#' p <- set_parms(livestock$defparms, set = list(b = 0.1, f = 0.9, p = 0.99))
 #' plot_pairapproximation(livestock, parms = p, new = TRUE)
 
 plot_pairapproximation <- function(
@@ -32,51 +32,9 @@ plot_pairapproximation <- function(
   if(dev.cur() == 1 | new == TRUE) plot_base()
 
   # draw trajectories of mortality and growth
-  ini <- list(
-    rho_1 = rho_1_ini,
-    rho_11 = c(0, NA),
-    rho_10 = NA,
-    rho_00 = NA,
-    rho_0 = NA
+  output <- sim_attractor(model, parms, rho_1_ini = rho_1_ini, times = times, method = method)
 
-  )
-
-  ini <- expand.grid(ini)
-
-
-  ini$rho_11[is.na(ini$rho_11)] <- ini$rho_1[is.na(ini$rho_11)]
-
-
-  for(x in 1:nrow(ini)) {
-    temp <- unlist(expand_rho(c(ini[[x,1]], ini[[x,2]])))
-
-    #if(ini[x,]$rho_11 == 0) {
-    while(any(is.na(temp)) & ini[[x,2]] <= ini[[x,1]]) {
-      ini[[x,2]] <-  ini[[x,2]]+0.005
-      temp <- expand_rho(c(ini[[x,1]], ini[[x,2]]))
-    }
-
-    ini[x,] <- temp
-  }
-
-
-  ini$m_ini <- mortality(ini$rho_1, ini$rho_11/ini$rho_1, parms)
-  ini$g_ini <- growth(ini$rho_1, ini$rho_10/ini$rho_0, parms)
-
-  ini <- subset(ini, !is.na(m_ini) & !is.na(ini$g_ini) &  ini$g_ini >= 0)
-  ini <- cbind(ID = 1:nrow(ini),ini)
-
-
-  foreach(iteration = ini$ID, .packages = c("deSolve")) %dopar% {
-
-    rho_starting <- unlist(ini[iteration, 2:3])
-
-    # running the ode-solver
-    runmodel <- deSolve::ode(rho_starting, func = model$pair, times = 1.05^seq(0,100,1), parms = parms, method = method)
-
-    return(as.data.frame(runmodel))
-  } -> output
-
+  # visualize trajectories to the attractor
   sapply(output, function(x){
 
     lines(x$rho_1, mortality(x$rho_1, x$rho_11/x$rho_1, parms))

@@ -14,13 +14,13 @@
 #' @export
 #' @examples
 #'
-#' p <- set_parms(livestock$defparms, set = list(b = 0.1, f = 0.7, p = 0.8))
+#' p <- set_parms(livestock$defparms, set = list(b = 0.9, c = 0.2, f = 0, p = 0, alpha = 0.2))
 #' plot_pairapproximation3D(livestock, parms = p)
 
 plot_pairapproximation3D <- function(
   model,
   parms = model$defparms,
-  rho_1_ini = seq(0,1, length = 11),
+  rho_1_ini = seq(0,1, length = 21),
   rho_11_ini = seq(0,1, length = 11),
   times = c(0,1000),
   method = "ode45",
@@ -38,54 +38,13 @@ plot_pairapproximation3D <- function(
 
 
   # draw trajectories of mortality and growth
-  ini <- list(
-    rho_1 = rho_1_ini,
-    rho_11 = rho_11_ini,
-    rho_10 = NA,
-    rho_00 = NA,
-    rho_0 = NA
+  output <- sim_attractor(model, parms, rho_1_ini = rho_1_ini, times = times, method = method)
 
-  )
-
-  ini <- expand.grid(ini)
-
-
-  #ini$rho_11[is.na(ini$rho_11)] <- ini$rho_1[is.na(ini$rho_11)]
-
-
-  for(x in 1:nrow(ini)) {
-    temp <- unlist(expand_rho(c(ini[[x,1]], ini[[x,2]])))
-
-    #if(ini[x,]$rho_11 == 0) {
-    #while(any(is.na(temp)) & ini[[x,2]] <= ini[[x,1]]) {
-    #  ini[[x,2]] <-  ini[[x,2]]+0.005
-    #  temp <- expand_rho(c(ini[[x,1]], ini[[x,2]]))
-    #}
-
-    ini[x,] <- temp
-  }
-
-  ini <- subset(ini, !is.na(rho_1))
-
-  ini$m_ini <- mortality(ini$rho_1, ini$rho_11/ini$rho_1, parms)
-  ini$g_ini <- growth(ini$rho_1, ini$rho_10/ini$rho_0, parms)
-
-  ini <- subset(ini, !is.na(m_ini) & !is.na(ini$g_ini) &  ini$g_ini >= 0)
-  ini <- cbind(ID = 1:nrow(ini),ini)
-
-  foreach(iteration = ini$ID, .packages = c("deSolve")) %dopar% {
-
-    rho_starting <- unlist(ini[iteration, 2:3])
-
-    # running the ode-solver
-    runmodel <- run_ode(rho_starting, func = model$pair, times = seq(0,150,length = 300), parms = parms, method = method)
-
-    return(as.data.frame(runmodel))
-  } -> output
+  # visualize trajectories to the attractor
 
   sapply(output, function(x){
     rgl.linestrips(x$rho_1,
-                   mortality(x$rho_1, q_11(x$rho_1, x$rho_1), parms),
+                   mortality(x$rho_1, q_11(x$rho_1, x$rho_11), parms),
                    q_11(x$rho_1, x$rho_11),
                    col = "black")
     #arrows(tail(x$rho_1,2)[1],tail(mortality(x$rho_1, x$rho_11/x$rho_1, parms),2)[1],tail(x$rho_1,1),tail(mortality(x$rho_1, x$rho_11/x$rho_1, parms),1), length = 0.1 )
