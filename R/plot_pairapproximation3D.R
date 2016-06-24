@@ -8,13 +8,11 @@
 #' @param colors
 #'
 #' @return
-#' @import deSolve
-#' @import foreach
 #' @import rgl
 #' @export
 #' @examples
 #'
-#' p <- set_parms(livestock$defparms, set = list(b = 0.9, c = 0.2, f = 0, p = 0, alpha = 0.2))
+#' p <- set_parms(livestock$defparms, set = list(b = 0.2, c = 0.2, f = 0.9, p = 0.99))
 #' plot_pairapproximation3D(livestock, parms = p)
 
 plot_pairapproximation3D <- function(
@@ -38,7 +36,7 @@ plot_pairapproximation3D <- function(
 
 
   # draw trajectories of mortality and growth
-  output <- sim_attractor(model, parms, rho_1_ini = rho_1_ini, times = times, method = method)
+  output <- sim_trajectories(model, parms, rho_1_ini = rho_1_ini, times = times, method = method)
 
   # visualize trajectories to the attractor
 

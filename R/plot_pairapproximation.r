@@ -8,8 +8,6 @@
 #' @param colors
 #'
 #' @return
-#' @import deSolve
-#' @import foreach
 #' @export
 #' @examples
 #'
@@ -32,7 +30,7 @@ plot_pairapproximation <- function(
   if(dev.cur() == 1 | new == TRUE) plot_base()
 
   # draw trajectories of mortality and growth
-  output <- sim_attractor(model, parms, rho_1_ini = rho_1_ini, times = times, method = method)
+  output <- sim_trajectories(model, parms, rho_1_ini = rho_1_ini, times = times, method = method)
 
   # visualize trajectories to the attractor
   sapply(output, function(x){
