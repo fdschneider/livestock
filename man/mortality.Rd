@@ -2,14 +2,14 @@
 % Please edit documentation in R/mortality.r
 \name{mortality}
 \alias{mortality}
-\title{Title}
+\title{calculate plant mortality at a given cover and local cover}
 \usage{
-mortality(rho_1, q_11 = 1, parms = livestock$defparms, set = list(NA))
+mortality(rho_1, q_11 = 1, parms = livestock$defparms)
 }
 \arguments{
 \item{set}{}
 }
 \description{
-Title
+calculate plant mortality at a given cover and local cover
 }
 

@@ -4,7 +4,7 @@
 \alias{growth}
 \title{Title}
 \usage{
-growth(rho_1, q_01 = "auto", parms = livestock$defparms, set = list(NA))
+growth(rho_1, q_01 = "auto", parms = livestock$defparms)
 }
 \arguments{
 \item{set}{}

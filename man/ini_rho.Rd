@@ -24,6 +24,5 @@ Title
 
 ini_rho(0.9, cc = 1.2)
 
-
 }
 
