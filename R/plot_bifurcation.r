@@ -14,18 +14,37 @@
 #' @return
 #' @export
 #'
+#' @examples
+#'
+#' library(foreach)
+#' library(doSNOW)
+#'
+#' workerlist <- c(rep("localhost", times = 3))
+#' cl <- makeSOCKcluster(workerlist)
+#' registerDoSNOW(cl)
+#'
+#' p <- set_parms(livestock$defparms, set = list(b = 0.9, c = 0.2, f = 0, p = 0, alpha = 0.2))
+#' plot_bifurcation(livestock, parms = p)
+#'
+#' stopCluster(cl)
+#'
+#'
 plot_bifurcation <- function(
                       model,
                       parms = model$defparms,
                       over = "b",
                       xrange = c(0,1),
-                      res = 11,
+                      res = 201,
                       ini = c(0.9, 0.0001),
                       t_max = 150,
                       method = "ode45",
                       colors = c("#000000","#009933"),
                       new = FALSE
                     ) {
+
+  equilibria <- sim_bifurcations(model, over = over, xrange = xrange, ini = ini, t_max = t_max, res = res, parms = parms, method = method)
+
+  plot(equilibria$rho_1~ equilibria[,over], xlab = over, pch = 20, cex = 0.66, ylim = c(0,1))
 
 
   parms[[over]] <- seq(xrange[1],xrange[2],length = res)
@@ -37,22 +56,10 @@ plot_bifurcation <- function(
   iterations$b <- as.numeric(as.character(iterations$b))
   iterations$L <- as.numeric(as.character(iterations$L))
 
-  foreach(iteration = iterations$ID, .packages = c("deSolve"), .combine = rbind) %dopar% {
+  # draw mean-field estimate of unstable equilibrium (threshold)
 
-    model_parms <- as.list(iterations[iteration,])
-
-    rho_starting <- ini_rho(model_parms$rho_ini)
-
-    # running the ode-solver
-    runmodel <- deSolve::ode(rho_starting, func = model$pair, times = c(0,t_max), parms = model_parms, method = method)
-
-    return(tail(runmodel,1))
-  } -> output
-
-  output <- cbind(iterations,output)
-
-  upper <- output[output$rho_ini == ini[1],][which(round(output[output$rho_ini == ini[1],]$rho_1,4) != round(output[output$rho_ini == ini[2],]$rho_1,4)),]
-  lower <- output[output$rho_ini == ini[2],][which(round(output[output$rho_ini == ini[2],]$rho_1,4) != round(output[output$rho_ini == ini[1],]$rho_1,4)),]
+  upper <- equilibria[equilibria$rho_ini == ini[1],][which(round(equilibria[equilibria$rho_ini == ini[1],]$rho_1,4) != round(equilibria[equilibria$rho_ini == ini[2],]$rho_1,4)),]
+  lower <- equilibria[equilibria$rho_ini == ini[2],][which(round(equilibria[equilibria$rho_ini == ini[2],]$rho_1,4) != round(equilibria[equilibria$rho_ini == ini[1],]$rho_1,4)),]
 
   if(nrow(upper)>0) {
     foreach(i = upper[,over], .combine = rbind, .packages = c("deSolve") ) %dopar% {
@@ -66,18 +73,18 @@ plot_bifurcation <- function(
 
       for(j in 1:10) {
 
-        rho_ini <- ini_rho( (hi_1+lo_1)/2 , (hi_11+lo_11)/2 )
+        rho_ini <- ini_rho( (hi_1+lo_1)/2 )
 
         # running the ode-solver
 
-        runmodel <- deSolve::ode(rho_ini, func = model$pair, times = c(0,1.5), parms = model_parms, method = method)
+        runmodel <- run_ode(rho_ini, func = model$pair, times = c(0,1.5), parms = model_parms, method = method)
 
         if(runmodel[2,"rho_1"] < runmodel[1,"rho_1"] ) {
           lo_1 <- (hi_1+lo_1)/2
-          lo_11 <- (hi_11+lo_11)/2
+          #lo_11 <- (hi_11+lo_11)/2
         } else {
           hi_1 <- (hi_1+lo_1)/2
-          hi_11 <- (hi_11+lo_11)/2
+          #hi_11 <- (hi_11+lo_11)/2
         }
 
       }
@@ -87,8 +94,9 @@ plot_bifurcation <- function(
   }
 
     output_unstable <- cbind(upper[,1:16],output_unstable)
+    points(output_unstable$rho_1~ output_unstable[,over], pch = 20, cex = 0.66, ylim = c(0,1), col = "grey60")
 
-
+    output <-  list(stable = equilibria, unstable = output_unstable)
   return(output)
 
 }
