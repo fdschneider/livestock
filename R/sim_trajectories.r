@@ -8,8 +8,14 @@
 #'
 #' @return
 #' @export
+#' @examples
 #'
-sim_attractor <- function(model,
+#' p <- set_parms(livestock$defparms, set = list(b = 0.9, c = 0.2, f = 0, p = 0, alpha = 0.2))
+#' sim_trajectories(livestock, parms = p)
+#'
+#'
+
+sim_trajectories<- function(model,
                           parms = model$defparms,
                           rho_1_ini = seq(0,1, length = 11),
                           times = c(0,1000),
