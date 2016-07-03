@@ -37,6 +37,6 @@ ini_rho <- function(rho_1, rho_11 = NULL, cc = NULL) {
     warning("The value of requested clustering is not compatible with the requested total vegetation cover: please provide a lower local cover or clustering value.")
       }
 
-
+  class(out) <- "cover"
   return(out)
 }
