@@ -44,7 +44,7 @@ d_rho_mean <- function(rho, parms) {
 
 livestock <- list(
   template = ini_rho(rho_1 = 0.9999),
-  defparms = list(
+  parms = list(
     r = 1,
     b = 1,
     K = 1,
@@ -52,14 +52,13 @@ livestock <- list(
     c = 0,
     f = 0,
     m = 0.05,
-    a = 0.3,
-    h = 50,
-    L = 5,
+    a = 5,
+    h = 10,
+    L = 0.5,
     q = 0,
     v = 0,
     p = 0
   ),
-
   pair = function(t, rho, parms = model_parms) {
     if(rho[1] < 1e-6) {
       rho <- ini_rho(0,0)

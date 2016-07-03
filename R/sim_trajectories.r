@@ -19,6 +19,7 @@ sim_trajectories<- function(model,
                           parms = model$defparms,
                           rho_1_ini = seq(0,1, length = 11),
                           times = c(0,1000),
+                          func =  model$pair,
                           method = "ode45") {
 
 
@@ -63,7 +64,7 @@ sim_trajectories<- function(model,
     rho_starting <- unlist(ini[iteration, 2:3])
 
     # running the ode-solver
-    runmodel <- deSolve::ode(rho_starting, func = model$pair, times = 1.05^seq(0,100,1), parms = parms, method = method)
+    runmodel <- deSolve::ode(rho_starting, func = func, times = 1.05^seq(0,100,1), parms = parms, method = method)
 
     return(as.data.frame(runmodel))
   } -> output
