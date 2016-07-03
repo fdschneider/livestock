@@ -1,12 +1,13 @@
+
 #' @export
 
 d_rho_1 <- function(rho, parms) {
 
   growth <- with(parms,
-                 r * (b + (1 - b) * f * (rho[1] - rho[2])/(1- rho[1]) ) * rho[1]^( 1 + alpha) * (1 - rho[1]/(K * (1-c*(rho[1] - rho[2])/(1- rho[1])) ) ))
+                 r * (b + (1 - b) * f * q_01(rho[1],rho[2]) ) * rho[1]^( 1 + alpha) * (1 - rho[1]/(K * (1-c*q_01(rho[1],rho[2])) ) ))
   if(growth <= 0 | is.na(growth)) {growth <- 0}
 
-  mortality <- with(parms, m * rho[1] + ( (a + v*rho[2]/rho[1]) * (1 - p * rho[2]/rho[1]) * rho[1]^( 1 + q) * L)/(1 + (a + v*rho[2]/rho[1]) * (1 - p * rho[2]/rho[1]) * h  * rho[1]^( 1 + q)) )
+  mortality <- with(parms, m * rho[1] + ( (a + v*q_11(rho[1],rho[2])) * (1 - p * q_11(rho[1],rho[2])) * rho[1]^( 1 + q) * L)/(1 + (a + v*rho[2]/rho[1]) * (1 - p * q_11(rho[1],rho[2])) * h  * rho[1]^( 1 + q)) )
   if(mortality <= 0 | is.na(mortality)) {mortality <- 0}
 
   return(growth - mortality)
@@ -18,7 +19,7 @@ d_rho_1 <- function(rho, parms) {
 d_rho_11 <- function(rho,  parms) {
 
   growth <- with(parms,
-                 2* (rho[1] - rho[2]) * r * (b + (1 - b) * f * (rho[1] - rho[2])/(1- rho[1]) ) * rho[1]^( 1 + alpha) * (1 - rho[1]/(K * (1-c*(rho[1] - rho[2])/(1- rho[1])) ) ) / (1-rho[1]))
+                 2* (rho[1] - rho[2]) * r * (b + (1 - b) * f * q_01(rho[1],rho[2]) ) * rho[1]^( 1 + alpha) * (1 - rho[1]/(K * (1-c*q_01(rho[1],rho[2])) ) ) / (1-rho[1]))
   if(growth <= 0 | is.na(growth)) growth <- 0
 
   mortality <- with(parms, 2 * rho[2] * m  + 2 * rho[2] * ( (a + v*rho[2]/rho[1]) * (1 - p * rho[2]/rho[1])  * rho[1]^( 1 + q) * L )/(1 +(a + v*rho[2]/rho[1]) * (1 - p * rho[2]/rho[1])  * h  * rho[1]^( 1 + q))  )
