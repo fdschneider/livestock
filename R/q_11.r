@@ -11,15 +11,9 @@
 #' q_11(rho)
 #'
 
-q_11 <- function(rho, rho_11 = NULL) {
-  if(!is.null(rho_11)) {
-    rho <- ini_rho(rho, rho_11)
-  } else {
-    stop("provide object of class 'cover' or second argument for rho_11!")
-  }
-  out <- rho[2]/rho[1]
+q_11 <- function(rho) {
+  out <- rho[[2]]/rho[[1]]
   return(as.vector(out))
-
 }
 
 #q_11 <- function(rho_1, rho_11) {
@@ -42,15 +36,9 @@ q_11 <- function(rho, rho_11 = NULL) {
 #' q_01(rho)
 #'
 
-q_01 <-  function(rho, rho_11 = NULL) {
-  if(!class(rho) == "cover" & !is.null(rho_11)) {
-    rho <- ini_rho(rho, rho_11)
-    } else {
-    stop("provide object of class 'cover' or second argument for rho_11!")
-  }
-
-  out <- (rho[1]-rho[2])/(1-rho[1])
-  return(as.vector(out))
+q_01 <-  function(rho) {
+    out <- (rho[[1]]-rho[[2]])/(1-rho[[1]])
+    return(as.vector(out))
 }
 
 
