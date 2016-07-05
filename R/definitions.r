@@ -12,13 +12,13 @@
 death <- function(rho, parms = livestock$parms) {
 
   # substitutions
-  a = parms$a + parms$v * q_11(rho) #* (1 - parms$p) * q_11(rho)
+  a = parms$a + parms$v * q_11(rho)/rho[[1]] #* (1 - parms$p) * q_11(rho)
   a = a * rho[[1]]^(parms$q)  # density dependent search efficiency: fr type III
-  h = parms$h
-  L = parms$L * (1 - parms$p * q_11(rho))
+  h = parms$h #^(1 + parms$p * q_11(rho))
+  L = parms$L * (1 -  parms$p * q_11(rho) )
 
   # individual death rate
-  out <-  a * L / (1 + a * h * rho[[1]])
+  out <-  parms$m  + a * L / (1 + a * h * rho[[1]])
 
   out[out < 0] <- 0
   return(as.vector(out))
@@ -26,6 +26,9 @@ death <- function(rho, parms = livestock$parms) {
 }
 
 
+mortality <- function(rho, parms = livestoch$parms) {
+  death(rho, parms) * rho[[1]]
+}
 
 #' @export
 
@@ -41,4 +44,8 @@ colonization <- function(rho, parms = livestock$parms)  {
 
   out[out < 0] <- 0
   return(as.vector(out))
+}
+
+growth <- function(rho, parms = livestock$parms)  {
+  colonization(rho, parms) * (1-rho[[1]])
 }
