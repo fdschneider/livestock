@@ -12,27 +12,29 @@
 #' @export
 #' @examples
 #'
-#' p <- set_parms(livestock$defparms, set = list(b = 0.2, c = 0.2, f = 0.9, p = 0.99))
+#' p <- set_parms(livestock$parms, set = list(b = 0.3, f= 0.5))
 #' plot_pairapproximation3D(livestock, parms = p)
 
 plot_pairapproximation3D <- function(
   model,
-  parms = model$defparms,
+  parms = model$parms,
   rho_1_ini = seq(0,1, length = 21),
   rho_11_ini = seq(0,1, length = 11),
   times = c(0,1000),
   method = "ode45",
-  colors = c("#000000","#009933")
+  colors = c("#000000","#009933"),
+  meanfield = FALSE,
+  ...
 ) {
 
   # open new base plot if none exists
   #rgl.open()
 
   plot3d(NA,NA,NA,
-         xlim = c(0,1), ylim = c(0,0.25), zlim = c(0,1),
-         xlab = "vegetation cover", ylab = "growth/mortality", zlab = "local vegetation cover",
-         type = "n", box = TRUE)
-  rgl.bg(fogtype = "exp2", color = "white")
+         xlim = c(0,1), ylim = c(0,1), zlim = c(0,0.25),
+         xlab = "vegetation cover", ylab = "local vegetation cover", zlab = "growth/mortality",
+         type = "n", box = TRUE, ...)
+  rgl.bg(fogtype = "exp2", fog = TRUE, color = "white")
 
 
   # draw trajectories of mortality and growth
@@ -40,18 +42,18 @@ plot_pairapproximation3D <- function(
 
   # visualize trajectories to the attractor
 
-  sapply(output, function(x){
-    rgl.linestrips(x$rho_1,
-                   mortality(x$rho_1, q_11(x$rho_1, x$rho_11), parms),
-                   q_11(x$rho_1, x$rho_11),
-                   col = "black")
-    #arrows(tail(x$rho_1,2)[1],tail(mortality(x$rho_1, x$rho_11/x$rho_1, parms),2)[1],tail(x$rho_1,1),tail(mortality(x$rho_1, x$rho_11/x$rho_1, parms),1), length = 0.1 )
 
-    rgl.linestrips(x$rho_1,
-                   growth(x$rho_1, q_01(x$rho_1, x$rho_11), parms),
-                   q_11(x$rho_1, x$rho_11),
-                   col = "#009933")
-    #arrows(tail(x$rho_1,2)[1],tail(growth(x$rho_1, (x$rho_1-x$rho_11)/(1-x$rho_1), parms),2)[1],tail(x$rho_1,1),tail(growth(x$rho_1, (x$rho_1-x$rho_11)/(1-x$rho_1), parms),1), length = 0.1 , col = "#009933")
+  sapply(output, function(x){
+    rho <- ini_rho(x$rho_1, x$rho_11)
+    rgl.linestrips(rho$rho_1,
+                   q_11(rho),
+                   limit(rho$rho_1*death(rho, parms)),
+                   col = colors[1])
+
+    rgl.linestrips(rho$rho_1,
+                   q_11(rho),
+                   limit((1-rho$rho_1)*colonization(rho, parms)),
+                   col =  colors[2])
 
   }
   )
@@ -60,14 +62,28 @@ plot_pairapproximation3D <- function(
   eq <- get_equilibria(model$pair, y = model$template, parms = parms, method = method, t_max = 130)
 
   # draw points
+  rho <- ini_rho(c(eq$lo[1], eq$hi[1]), c(eq$lo[2], eq$hi[2]))
   rgl.spheres(
-    c(eq$lo[1],eq$hi[1]),
-    growth(c(eq$lo[1],eq$hi[1]), c(q_01(eq$lo[1], eq$lo[2]), q_01(eq$hi[1], eq$hi[2])), parms),
-    c(q_11(eq$lo[1], eq$lo[2]), q_11(eq$hi[1], eq$hi[2])),
+    rho[[1]],
+    q_11(rho),
+    limit(rho[[1]]*death(rho, parms)),
     radius = 0.01,
     xpd = TRUE, pch = 20, cex = 2)
-  #points(eq$mid[1],growth(eq$mid[1],eq$mid[1],parms), xpd = TRUE, pch = 21, cex = 1.5, bg = "white")
 
+  if(meanfield == TRUE) {
+
+    # plot meanfield
+    rho_1 <- seq(0,1,length = 100)
+    rgl.linestrips(rho_1,
+                   rho_1,
+                   limit(rho_1*death(ini_rho(rho_1), parms)),
+                   col = "black", lwd =2)
+
+    rgl.linestrips(rho_1,
+                   rho_1,
+                   limit((1-rho_1)*colonization(ini_rho(rho_1), parms)),
+                   col = "#009933", lwd = 2)
+  }
 }
 
 
