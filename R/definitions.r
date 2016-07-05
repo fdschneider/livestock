@@ -1,10 +1,24 @@
 #' title: Model definitions
 #'
+#' @usage
+#'
+#' death(rho, parms)
+#' colonization(rho, parms)
+#'
+#' @details defining chances of death and colonization per location, depending on the global and local vegetation cover.
+#'
 #' @export
 
-mortality <- function(rho, parms = livestock$parms) {
+death <- function(rho, parms = livestock$parms) {
 
-  out <-   with(parms, m * rho[1] + ( a(rho, parms) * p(rho, parms) * rho[1]^(1 + q) * L)/(1 + a(rho, parms) * p(rho, parms) * h(rho,parms) * rho[1]^(1 + q)) )
+  # substitutions
+  a = parms$a + parms$v * q_11(rho) * 1 - parms$p * q_11(rho)
+  a = a * rho[1]^(parms$q)  # density dependent search efficiency: fr type III
+  h = parms$h
+  L = parms$L
+
+  # individual death rate
+  out <-  a * L / (1 + a * h * rho[1])
 
   out[out < 0] <- 0
   return(as.vector(out))
@@ -12,35 +26,19 @@ mortality <- function(rho, parms = livestock$parms) {
 }
 
 
-#' @export
-a <- function(rho, parms) { with(parms, a + v * q_11(rho[1],rho[2]) ) }
-
-#' @export
-h <- function(rho, parms) { with(parms, h ) }
-
-#' @export
-p <- function(rho, parms) { with(parms, 1 - p * q_11(rho[1],rho[2]) ) }
-
-#' @export
-L <- function(rho, parms) { with(parms, L) }
-
 
 #' @export
 
-growth0 <- function(rho, parms = livestock$parms)  {
+colonization <- function(rho, parms = livestock$parms)  {
 
-  out <-   with(parms,
-                r * (b + (1 - b) * f(rho, parms)) * rho[1]^( 1 + alpha) * (1 - rho[1]/(K * competition(rho, parms) ) ))
+  # substitutions
+  b = parms$b + (1- parms$b) * parms$f * q_01(rho)  # facilitation
+  r = parms$r * rho[1]^parms$alpha   # water runoff
+  K = parms$K *  1 - parms$c * q_01(rho)
+
+  # individual colonization rate
+  out <-   r * b * (1 - rho[1]/K )
 
   out[out < 0] <- 0
   return(as.vector(out))
 }
-
-#' @export
-
-f <- function(rho, parms) {  parms$f * q_01(rho[1],rho[2]) }
-
-#' @export
-
-competition <- function(rho, parms) {  1 - parms$c * q_01(rho[1],rho[2])  }
-
