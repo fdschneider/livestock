@@ -6,7 +6,8 @@
 \usage{
 plot_pairapproximation3D(model, parms = model$defparms, rho_1_ini = seq(0,
   1, length = 21), rho_11_ini = seq(0, 1, length = 11), times = c(0, 1000),
-  method = "ode45", colors = c("#000000", "#009933"))
+  method = "ode45", colors = c("#000000", "#009933"), meanfield = TRUE,
+  ...)
 }
 \arguments{
 \item{colors}{}

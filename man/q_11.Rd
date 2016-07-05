@@ -2,14 +2,20 @@
 % Please edit documentation in R/q_11.r
 \name{q_11}
 \alias{q_11}
-\title{Title}
+\title{Transfer cover object into average local cover of vegetated cells, q_11.}
 \usage{
-q_11(rho_1, rho_11, zlim = c(0, 1))
+q_11(rho)
 }
 \arguments{
-\item{zlim}{}
+\item{rho}{}
 }
 \description{
-Title
+Transfer cover object into average local cover of vegetated cells, q_11.
+}
+\examples{
+
+rho <- ini_rho(0.5,0.45)
+q_11(rho)
+
 }
 

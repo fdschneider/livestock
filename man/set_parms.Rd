@@ -14,7 +14,7 @@ Title
 }
 \examples{
 
-p <- set_parms(livestock$defparms, set = list(b = 0.2, f = 0.9))
+p <- set_parms(livestock$parms, set = list(b = 0.2, f = 0.9))
 
 }
 

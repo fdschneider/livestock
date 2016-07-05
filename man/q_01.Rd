@@ -2,14 +2,20 @@
 % Please edit documentation in R/q_11.r
 \name{q_01}
 \alias{q_01}
-\title{Title}
+\title{Transfer cover object into average local cover of empty cells, q_01.}
 \usage{
-q_01(rho_1, rho_11, zlim = c(0, 1))
+q_01(rho)
 }
 \arguments{
-\item{zlim}{}
+\item{rho}{}
 }
 \description{
-Title
+Transfer cover object into average local cover of empty cells, q_01.
+}
+\examples{
+
+rho <- ini_rho(0.5,0.45)
+q_01(rho)
+
 }
 

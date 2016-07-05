@@ -5,7 +5,7 @@
 \title{Title}
 \usage{
 sim_trajectories(model, parms = model$defparms, rho_1_ini = seq(0, 1, length
-  = 11), times = c(0, 1000), method = "ode45")
+  = 11), times = c(0, 1000), func = model$pair, method = "ode45")
 }
 \arguments{
 \item{method}{}

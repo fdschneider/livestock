@@ -14,7 +14,7 @@ Title
 }
 \examples{
 
-get_equilibria(livestock$pair, ini_rho(rho_1 = 0.9999), livestock$defparms)
-get_equilibria(livestock$meanfield, ini_rho(rho_1 = 0.9999), livestock$defparms)
+get_equilibria(livestock$pair, ini_rho(rho_1 = 0.9999), livestock$parms)
+get_equilibria(livestock$meanfield, ini_rho(rho_1 = 0.9999), livestock$parms)
 }
 
