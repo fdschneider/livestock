@@ -19,9 +19,9 @@ ini_rho <- function(rho_1, rho_11 = NULL, q_11 = NULL, cc = NULL) {
   if(is.null(rho_11[1]) & is.null(cc) & is.null(q_11)) {rho_11 <- rho_1^2}
   if(is.null(rho_11[1]) & !is.null(cc) & is.null(q_11)) {rho_11 <- cc*rho_1^2}
   if(is.null(rho_11[1]) & is.null(cc) & !is.null(q_11)) {rho_11 <- q_11*rho_1}
-  if(rho_11 > rho_1) {rho_11 <- rho_1}
+  rho_11[rho_11 > rho_1] <- rho_1[rho_11 > rho_1]
 
-    out <- c(
+    out <- list(
       rho_1 = rho_1,
       rho_11 = rho_11#,
       #rho_10 = rho_1-rho_11,
@@ -29,8 +29,8 @@ ini_rho <- function(rho_1, rho_11 = NULL, q_11 = NULL, cc = NULL) {
       #rho_0 = 1-rho_1
     )
 
-    if(any(out < 0)) {
-      out <- c(
+    if(any(unlist(out) < 0)) {
+      out <- list(
       rho_1 = NA,
       rho_11 = NA#,
       #rho_10 = NA,

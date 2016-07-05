@@ -12,13 +12,13 @@
 death <- function(rho, parms = livestock$parms) {
 
   # substitutions
-  a = parms$a + parms$v * q_11(rho) * 1 - parms$p * q_11(rho)
-  a = a * rho[1]^(parms$q)  # density dependent search efficiency: fr type III
+  a = parms$a + parms$v * q_11(rho) #* (1 - parms$p) * q_11(rho)
+  a = a * rho[[1]]^(parms$q)  # density dependent search efficiency: fr type III
   h = parms$h
-  L = parms$L
+  L = parms$L * (1 - parms$p * q_11(rho))
 
   # individual death rate
-  out <-  a * L / (1 + a * h * rho[1])
+  out <-  a * L / (1 + a * h * rho[[1]])
 
   out[out < 0] <- 0
   return(as.vector(out))
@@ -33,11 +33,11 @@ colonization <- function(rho, parms = livestock$parms)  {
 
   # substitutions
   b = parms$b + (1- parms$b) * parms$f * q_01(rho)  # facilitation
-  r = parms$r * rho[1]^parms$alpha   # water runoff
-  K = parms$K *  1 - parms$c * q_01(rho)
+  r = parms$r * rho[[1]]^parms$alpha   # water runoff
+  K = parms$K *  (1 - parms$c * q_01(rho))
 
   # individual colonization rate
-  out <-   r * b * (1 - rho[1]/K )
+  out <-   r * rho[[1]] * b * (1 - rho[[1]]/K ) / (1-rho[[1]])
 
   out[out < 0] <- 0
   return(as.vector(out))
