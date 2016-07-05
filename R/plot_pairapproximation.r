@@ -11,12 +11,12 @@
 #' @export
 #' @examples
 #'
-#' p <- set_parms(livestock$defparms, set = list(b = 0.1, f = 0.9, p = 0.99))
-#' plot_pairapproximation(livestock, parms = p, new = TRUE)
+#' p <- set_parms(livestock$parms, set = list(b = 0.1, f = 0.9, p = 0.99))
+#' plot_pairapproximation(livestock, parms = p)
 
 plot_pairapproximation <- function(
   model,
-  parms = model$defparms,
+  parms = model$parms,
   rho_1_ini = seq(0,1, length = 11),
   rho_11_ini = seq(0,1, length = 11),
   times = c(0,1000),
@@ -30,25 +30,26 @@ plot_pairapproximation <- function(
   if(dev.cur() == 1 | new == TRUE) plot_base()
 
   # draw trajectories of mortality and growth
-  output <- sim_trajectories(model, parms, rho_1_ini = rho_1_ini, times = times, method = method)
+  output <- sim_trajectories(model = model, parms = parms, rho_1_ini = rho_1_ini, times = times, method = method)
 
   # visualize trajectories to the attractor
   sapply(output, function(x){
+    rho <- ini_rho(x$rho_1, x$rho_11)
+    mort <- limit(rho$rho_1*death(rho, parms))
+    lines(rho$rho_1,  mort)
+    arrows(tail(rho$rho_1,2)[1],tail(mort,2)[1],tail(rho$rho_1,1),tail(mort,1), length = 0.1 )
 
-    lines(x$rho_1, mortality(x$rho_1, x$rho_11/x$rho_1, parms))
-    arrows(tail(x$rho_1,2)[1],tail(mortality(x$rho_1, x$rho_11/x$rho_1, parms),2)[1],tail(x$rho_1,1),tail(mortality(x$rho_1, x$rho_11/x$rho_1, parms),1), length = 0.1 )
+    grow <- limit((1-rho$rho_1)*colonization(rho, parms))
+    lines(rho$rho_1, grow, col = "#009933")
+    arrows(tail(rho$rho_1,2)[1],tail(grow,2)[1],tail(rho$rho_1,1),tail(grow,1), length = 0.1 , col = "#009933")
 
-    lines(x$rho_1, growth(x$rho_1, (x$rho_1-x$rho_11)/(1-x$rho_1), parms), col = "#009933")
-    arrows(tail(x$rho_1,2)[1],tail(growth(x$rho_1, (x$rho_1-x$rho_11)/(1-x$rho_1), parms),2)[1],tail(x$rho_1,1),tail(growth(x$rho_1, (x$rho_1-x$rho_11)/(1-x$rho_1), parms),1), length = 0.1 , col = "#009933")
-
-    #return(c(rho_1 = tail(x$rho_1,1), G =  tail(growth(x$rho_1, x$rho_10/x$rho_0, parms),1)  , C = tail(mortality(x$rho_1, x$rho_11/x$rho_1, parms),1)) )
   }
   )
 
   eq <- get_equilibria(model$pair, y = model$template, parms = parms, method = method, t_max = 130)
-
+  rho <- ini_rho(c(eq$lo[1],eq$hi[1]),c(eq$lo[2],eq$hi[2]))
   # draw points
-  points(c(eq$lo[1],eq$hi[1]), growth(c(eq$lo[1],eq$hi[1]), (c(eq$lo[1],eq$hi[1])-c(eq$lo[2],eq$hi[2]))/(1-c(eq$lo[1],eq$hi[1])), parms), xpd = TRUE, pch = 20, cex = 2)
+  points(rho$rho_1, rho$rho_1*death(rho, parms), xpd = TRUE, pch = 20, cex = 2)
   #points(eq$mid[1],growth(eq$mid[1],eq$mid[1],parms), xpd = TRUE, pch = 21, cex = 1.5, bg = "white")
 
 

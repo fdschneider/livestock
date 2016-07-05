@@ -12,7 +12,7 @@
 #' @export
 #' @examples
 #'
-#' p <- set_parms(livestock$parms, set = list(b = 0.3, f= 0.5))
+#' p <- set_parms(livestock$parms, set = list(b = 0.3, f= 0.5,  a = 2, h = 10, p = 0.9))
 #' plot_pairapproximation3D(livestock, parms = p)
 
 plot_pairapproximation3D <- function(
@@ -23,7 +23,7 @@ plot_pairapproximation3D <- function(
   times = c(0,1000),
   method = "ode45",
   colors = c("#000000","#009933"),
-  meanfield = FALSE,
+  meanfield = TRUE,
   ...
 ) {
 
