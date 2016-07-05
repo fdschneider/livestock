@@ -24,6 +24,7 @@
 run_ode <- function(y, func, times = 1.05^seq(0,100,1), parms, ...) {
   out <- deSolve::ode(y = as.numeric(y), func = func, times = times, parms = parms, ...)
   out[out < 1e-06] <- 0
+  colnames(out) <- c("time", "rho_1", "rho_11")
   return(round(out,6))
   return(as.data.frame(out))
 }
