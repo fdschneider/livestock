@@ -45,9 +45,9 @@ livestock <- list(
     c = 0,
     f = 0,
     m = 0.05,
-    a = 5,
-    h = 10,
-    L = 0.5,
+    a = 10,
+    h = 20,
+    L = 1,
     q = 0,
     v = 0,
     p = 0
@@ -55,8 +55,8 @@ livestock <- list(
   pair = function(t, rho, parms = model_parms) {
 
     # insert equations here
-    delta_1 = (1-rho[1]) * colonization(rho, parms) - rho[1] * death(rho, parms)
-    delta_11 = 2 * (rho[1]-rho[2]) * colonization(rho, parms) - 2 * rho[2] * death(rho, parms)
+    delta_1 = (1-rho[[1]]) * colonization(rho, parms) - rho[[1]] * death(rho, parms)
+    delta_11 = 2 * (rho[[1]]-rho[[2]]) * colonization(rho, parms) - 2 * rho[[2]] * death(rho, parms)
 
     if(rho[1] < 1e-6) {
       out <- list(c(
@@ -73,25 +73,25 @@ livestock <- list(
   },
   meanfield = function(t, rho, parms = model_parms) {
 
-    rho <- ini_rho(rho[1])
-    delta_1 <- (1-rho[1])*colonization(rho, parms) - rho[1]*death(rho, parms)
+    rho <- ini_rho(rho[[1]])
+    delta_1 <- (1-rho[[1]])*colonization(rho, parms) - rho[[1]]*death(rho, parms)
 
-    list(c(
-          rho_1 = delta_1,
-         rho_11 = delta_1
-         ))
+    if(rho[1] < 1e-6) {
+      out <- list(c(
+        rho_1 = 0,
+        rho_11 = 0
+      )  )
+    } else {
+      out <- list(c(
+        rho_1 = delta_1,
+        rho_11 = delta_1
+      )  )
+    }
+    return(out)
   },
   update = function(x_old, parms, subs = 12) {
 
     x_new <- x_old
-
-    if(length(parms$b) > 1) {
-      climate <- parms$b[i]
-    } else {
-      climate <- parms$b
-    }
-
-    if(parms$sigma > 0)  climate <- climate * abs(rnorm(1, 1, parms$sigma))
 
     for(s in 1:subs) {
 
@@ -106,11 +106,11 @@ livestock <- list(
       rnum <- runif(x_old$dim[1]*x_old$dim[2]) # one random number between 0 and 1 for each cell
 
       # 3 - setting transition probabilities
-      growth <- with(parms, (r * (climate + (1-climate)*f*q_one_one) * rho_one^(1 + alpha) * ( 1 - (rho_one / (K * (1-c*q_one_one) ))) / (1 - rho_one))  *1/subs)  # recolonisation rates of all cells
+      growth <- with(parms, colonization(ini_rho(rho_one, q_11 = q_one_one), parms) *1/subs)  # recolonisation rates of all cells
 
       growth[growth < 0] <- 0
 
-      death <- with(parms,       (m + ( (a+ v*q_one_one) * (1-p*q_one_one) * L * rho_one^(1+q) )/( 1 + (a+ v*q_one_one) * (1-p*q_one_one) * h * rho_one^(1+q) )) *1/subs)   # set probability of death for each cell
+      death <- with(parms, death(ini_rho(rho_one, q_11 = q_one_one), parms) *1/subs)   # set probability of death for each cell
 
       death[death < 0] <- 0
 
