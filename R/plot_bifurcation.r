@@ -23,15 +23,15 @@
 #' cl <- makeSOCKcluster(workerlist)
 #' registerDoSNOW(cl)
 #'
-#' p <- set_parms(livestock$parms, set = list(b = 0.9, c = 0.2, f = 0, p = 0, alpha = 0.2))
-#' plot_bifurcation(livestock, over = "L", parms = p)
+#' p <- set_parms(livestock$parms, set = list(b = 0.3))
+#' plot_bifurcation(livestock, over = "L", xrange = c(0,3), parms = p)
 #'
 #' stopCluster(cl)
 #'
 #'
 plot_bifurcation <- function(
                       model,
-                      parms = model$defparms,
+                      parms = model$parms,
                       over = "b",
                       xrange = c(0,1),
                       res = 201,
@@ -45,7 +45,7 @@ plot_bifurcation <- function(
 
   equilibria <- sim_bifurcations(model, over = over, xrange = xrange, ini = ini, t_max = t_max, res = res, parms = parms, method = method)
 
-  plot(equilibria$rho_1~ equilibria[,over],
+  plot(equilibria$rho_1 ~ equilibria[,over],
        xlab = xlab, ylab = "vegetation cover",
        pch = 20, cex = 0.66,
        ylim = c(0,1))
