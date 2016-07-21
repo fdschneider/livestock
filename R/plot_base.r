@@ -5,10 +5,10 @@
 #' @return
 #' @export
 #'
-plot_base <- function(...) {
+plot_base <- function(..., ylab = "plant mortality/growth", xlab = "vegetation cover", ylim= c(0,.25)) {
   plot(NA,NA,
-       ylab = "plant mortality/growth", xlab = "vegetation cover",
-       xlim = c(0,1), ylim= c(0,.25),
+       ylab = ylab, xlab = xlab,
+       xlim = c(0,1), ylim= ylim,
        bty = "n",
        xaxs = "i" , yaxs = "i",
        ...)
