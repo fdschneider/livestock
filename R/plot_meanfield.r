@@ -13,6 +13,7 @@
 #' @examples
 #'
 #' plot_meanfield(livestock)
+#'
 plot_meanfield <- function(
   model,
   parms = model$defparms,
@@ -27,10 +28,10 @@ plot_meanfield <- function(
     if(dev.cur() == 1 | new == TRUE) plot_base()
 
     # draw functions of mortality and growth
-    lines(rho, mortality(rho, rho, parms), col = colors[1], lwd = 2)
-    lines(rho, growth(rho, rho, parms), col = colors[2], lwd = 2)
+    lines(rho, mortality(ini_rho(rho), parms), col = colors[1], lwd = 2)
+    lines(rho, growth(ini_rho(rho), parms), col = colors[2], lwd = 2)
 
-    eq <- get_equilibria(model$meanfield, model$template, parms)
+    eq <- get_equilibria(y = model$template, func = model$meanfield, parms = parms)
 
     # draw points
     points(c(eq$lo[1],eq$hi[1]), growth(c(eq$lo[1],eq$hi[1]), c(eq$lo[1],eq$hi[1]), parms), xpd = TRUE, pch = 20, cex = 2)

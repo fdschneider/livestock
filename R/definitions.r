@@ -25,7 +25,7 @@ death <- function(rho, parms = livestock$parms) {
 
 }
 
-
+#' @export
 mortality <- function(rho, parms = livestoch$parms) {
   death(rho, parms) * rho[[1]]
 }
@@ -46,6 +46,7 @@ colonization <- function(rho, parms = livestock$parms)  {
   return(as.vector(out))
 }
 
+#' @export
 growth <- function(rho, parms = livestock$parms)  {
   colonization(rho, parms) * (1-rho[[1]])
 }

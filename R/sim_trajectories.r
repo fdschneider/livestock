@@ -51,8 +51,8 @@ sim_trajectories<- function(model,
 #   }
 
   ini$q_11 <- q_11(rho) # <- data.frame(rho_1 = rho$rho_1, rho_11 = rho$rho_11)
-  ini$m_ini <- rho[[1]]*death(rho, parms)
-  ini$g_ini <- (1-rho[[1]])*colonization(rho, parms)
+  ini$m_ini <- mortality(rho, parms)
+  ini$g_ini <- growth(rho, parms)
 
   ini <- cbind(ID = 1:nrow(ini),ini)
   ini <- subset(ini, !is.na(m_ini) & !is.na(ini$g_ini) &  ini$g_ini >= 0)
