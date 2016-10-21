@@ -4,7 +4,8 @@
 \alias{get_equilibria}
 \title{Title}
 \usage{
-get_equilibria(odesys, y, parms, t_max = 1000, method = "ode45")
+get_equilibria(y, func = livestock$pair, parms, t_max = 1000,
+  method = "ode45")
 }
 \arguments{
 \item{method}{}
@@ -14,7 +15,7 @@ Title
 }
 \examples{
 
-get_equilibria(livestock$pair, ini_rho(rho_1 = 0.9999), livestock$parms)
-get_equilibria(livestock$meanfield, ini_rho(rho_1 = 0.9999), livestock$parms)
+get_equilibria(ini_rho(rho_1 = 0.9999), livestock$pair, livestock$parms)
+get_equilibria(ini_rho(rho_1 = 0.99), livestock$meanfield, livestock$parms)
 }
 

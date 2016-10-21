@@ -4,9 +4,10 @@
 \alias{plot_bifurcation}
 \title{Title}
 \usage{
-plot_bifurcation(model, parms = model$defparms, over = "b", xrange = c(0,
-  1), res = 201, ini = c(0.9, 1e-04), t_max = 150, method = "ode45",
-  xlab = over, colors = c("#000000", "#009933"), new = FALSE)
+plot_bifurcation(model, parms = model$parms, over = "b", xrange = c(0, 1),
+  res = 201, ini = c(0.9, 1e-04), t_max = 150, method = "ode45",
+  xlab = over, unstable = TRUE, colors = c("#000000", "#009933"),
+  new = FALSE)
 }
 \arguments{
 \item{new}{}
@@ -23,8 +24,8 @@ workerlist <- c(rep("localhost", times = 3))
 cl <- makeSOCKcluster(workerlist)
 registerDoSNOW(cl)
 
-p <- set_parms(livestock$parms, set = list(b = 0.9, c = 0.2, f = 0, p = 0, alpha = 0.2))
-plot_bifurcation(livestock, over = "L", parms = p)
+p <- set_parms(livestock$parms, set = list(b = 0.3))
+plot_bifurcation(livestock, over = "L", xrange = c(0,3), parms = p)
 
 stopCluster(cl)
 

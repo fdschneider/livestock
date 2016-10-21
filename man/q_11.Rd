@@ -16,6 +16,5 @@ Transfer cover object into average local cover of vegetated cells, q_11.
 
 rho <- ini_rho(0.5,0.45)
 q_11(rho)
-
 }
 

@@ -4,8 +4,8 @@
 \alias{sim_trajectories}
 \title{Title}
 \usage{
-sim_trajectories(model, parms = model$defparms, rho_1_ini = seq(0, 1, length
-  = 11), times = c(0, 1000), func = model$pair, method = "ode45")
+sim_trajectories(model, parms = model$parms, rho_1_ini = seq(0, 1, length =
+  11), times = c(0, 1000), func = model$pair, method = "ode45")
 }
 \arguments{
 \item{method}{}
@@ -15,7 +15,8 @@ Title
 }
 \examples{
 
-p <- set_parms(livestock$defparms, set = list(b = 0.9, c = 0.2, f = 0, p = 0, alpha = 0.2))
+library(foreach)
+p <- set_parms(livestock$parms, set = list(b = 0.2,f = 0.8))
 sim_trajectories(livestock, parms = p)
 
 

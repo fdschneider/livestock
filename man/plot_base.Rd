@@ -4,7 +4,8 @@
 \alias{plot_base}
 \title{Base plot of growth and mortality over vegetation cover}
 \usage{
-plot_base(...)
+plot_base(..., ylab = "plant mortality/growth", xlab = "vegetation cover",
+  ylim = c(0, 0.25))
 }
 \arguments{
 \item{...}{}

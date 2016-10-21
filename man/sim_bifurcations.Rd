@@ -23,7 +23,7 @@ workerlist <- c(rep("localhost", times = 3))
 cl <- makeSOCKcluster(workerlist)
 registerDoSNOW(cl)
 
-p <- set_parms(livestock$defparms, set = list(b = 0.9, c = 0.2, f = 0, p = 0, alpha = 0.2))
+p <- set_parms(livestock$parms, set = list(b = 0.9, c = 0.2, f = 0, p = 0, alpha = 0.2))
 sim_bifurcations(livestock, over = "b", res = 31, parms = p)
 
 stopCluster(cl)

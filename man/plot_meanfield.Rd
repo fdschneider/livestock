@@ -4,8 +4,8 @@
 \alias{plot_meanfield}
 \title{Draw meanfield model attractor}
 \usage{
-plot_meanfield(model, parms = model$defparms, times = c(0, 1000),
-  method = "ode45", rho = seq(0, 1, length = 100), colors = c("#000000",
+plot_meanfield(model, parms = model$parms, times = c(0, 1000),
+  method = "ode45", rho_x = seq(0, 1, length = 100), col = c("#000000",
   "#009933"), new = FALSE)
 }
 \arguments{
@@ -17,5 +17,6 @@ Draw meanfield model attractor
 \examples{
 
 plot_meanfield(livestock)
+
 }
 

@@ -4,9 +4,9 @@
 \alias{plot_bifurcation3D}
 \title{Title}
 \usage{
-plot_bifurcation3D(model, parms = model$defparms, over = "b",
-  xrange = c(0, 1), res = 31, ini = c(0.9, 1e-04), t_max = 150,
-  method = "ode45", colors = c("#000000", "#009933"), new = FALSE)
+plot_bifurcation3D(model, parms = model$parms, over = "b", xrange = c(0,
+  1), res = 21, ini = c(0.9, 1e-04), t_max = 150, method = "ode45",
+  colors = c("#000000", "#009933"), new = FALSE)
 }
 \arguments{
 \item{new}{}
@@ -15,7 +15,7 @@ plot_bifurcation3D(model, parms = model$defparms, over = "b",
 Title
 }
 \examples{
-
+library(rgl)
 p <- set_parms(livestock$defparms, set = list(b = 0.9, c = 0.2, f = 0, p = 0, alpha = 0.2))
 plot_bifurcation3D(livestock, parms = p)
 
