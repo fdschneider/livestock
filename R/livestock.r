@@ -73,10 +73,10 @@ livestock <- list(
   },
   meanfield = function(t, rho, parms = model_parms) {
 
-    rho <- ini_rho(rho[[1]])
+    #rho <- ini_rho(rho[[1]])
     delta_1 <- (1-rho[[1]])*colonization(rho, parms) - rho[[1]]*death(rho, parms)
 
-    if(rho[[1]] < 1e-6) {
+    if(rho[[1]]+delta_1 < 1e-6) {
       out <- list(c(
         rho_1 = 0,
         rho_11 = 0
