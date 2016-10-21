@@ -9,10 +9,13 @@
 #'
 #' rho <- ini_rho(0.5,0.45)
 #' q_11(rho)
-#'
 
 q_11 <- function(rho) {
-  out <- rho[[2]]/rho[[1]]
+  if(rho[[1]] == 0) {
+    out <- 0
+  } else {
+    out <- rho[[2]]/rho[[1]]
+  }
   return(as.vector(out))
 }
 
@@ -37,7 +40,12 @@ q_11 <- function(rho) {
 #'
 
 q_01 <-  function(rho) {
+  if(rho[[1]] == 1) {
+    out <- 0
+  } else {
     out <- (rho[[1]]-rho[[2]])/(1-rho[[1]])
+  }
+
     return(as.vector(out))
 }
 
