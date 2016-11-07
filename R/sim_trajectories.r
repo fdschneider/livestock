@@ -34,7 +34,7 @@ sim_trajectories<- function(model,
   ini <- expand.grid(ini)
 
 
-  ini$rho_11[is.na(ini$rho_11)] <- ini$rho_1[is.na(ini$rho_11)]
+  ini$rho_11[is.na(ini$rho_11)] <- ini$rho_1[is.na(ini$rho_11)] # replace NA-placeholder: assume maximal clustering, i.e. all vegetated cells have occupied neighbors. rho_11 == rho_1,
 
   rho <- ini_rho(ini$rho_1, ini$rho_11)
 #

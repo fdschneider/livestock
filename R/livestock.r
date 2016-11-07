@@ -89,7 +89,7 @@ livestock <- list(
     }
     return(out)
   },
-  update = function(x_old, parms, subs = 12) {
+  update = function(x_old, parms, subs = 12) {  #for cellular automata simulation in package caspr
 
     x_new <- x_old
 

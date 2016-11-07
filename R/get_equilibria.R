@@ -21,7 +21,7 @@ get_equilibria <- function(y,
   # simulate cover at t_1000 starting from high cover to get vegetated steady state
   hi <- as.numeric(run_ode(y = y, func = func, times = c(1,t_max), parms = parms, method = method)[2,-1])
 
-  # simulate cover at t_1000 starting from high cover to get vegetated steady state
+  # simulate cover at t_1000 starting from low cover to get vegetated steady state
   lo <- as.numeric(run_ode(y = ini_rho(1-y[[1]]), func = func, times = c(1,t_max), parms = parms, method = method)[2,-1])
 
   out <- list(lo = lo, hi = hi,  mid = NA)
