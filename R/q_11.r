@@ -11,11 +11,8 @@
 #' q_11(rho)
 
 q_11 <- function(rho) {
-  if(rho[[1]] == 0) {
-    out <- 0
-  } else {
-    out <- rho[[2]]/rho[[1]]
-  }
+  out <- rho[[2]]/rho[[1]]
+  out[is.nan(out)] <- 0
   return(as.vector(out))
 }
 
@@ -40,13 +37,9 @@ q_11 <- function(rho) {
 #'
 
 q_01 <-  function(rho) {
-  if(rho[[1]] == 1) {
-    out <- 0
-  } else {
-    out <- (rho[[1]]-rho[[2]])/(1-rho[[1]])
-  }
-
-    return(as.vector(out))
+  out <- (rho[[1]]-rho[[2]])/(1-rho[[1]])
+  out[is.nan(out)] <- 1
+  return(as.vector(out))
 }
 
 
