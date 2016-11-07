@@ -11,8 +11,11 @@
 
 death <- function(rho, parms = livestock$parms) {
 
+  # set clustering zero if cover is zero
+  cc = q_11(rho)/rho[[1]]
+  cc[is.nan(cc)] <- 0
+
   # substitutions
-  if(rho[[1]] != 0) {cc = q_11(rho)/rho[[1]]} else {cc = 0}  # set clustering zero if cover is zero
   a = parms$a + parms$v * cc #* (1 - parms$p) * q_11(rho)
   a = a * rho[[1]]^(parms$q)  # density dependent search efficiency: fr type III
   h = parms$h #^(1 + parms$p * q_11(rho))
