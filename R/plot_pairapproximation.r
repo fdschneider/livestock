@@ -13,6 +13,7 @@
 #'
 #' p <- set_parms(livestock$parms, set = list(b = 0.1, f = 0.9, p = 0.99))
 #' plot_pairapproximation(livestock, parms = p)
+#' plot_pairapproximation(livestock, parms = p, side = "plain")
 
 plot_pairapproximation <- function(
   model,
@@ -25,14 +26,15 @@ plot_pairapproximation <- function(
   rho = seq(0,1,length = 100),
   colors = c("#000000","#009933"),
   #fog = TRUE,
-  new = FALSE
+  new = TRUE,
+  ...
 ) {
 
   #par(mfrow = c(1,3))
   # open new base plot if none exists
   if(dev.cur() == 1 | new == TRUE) plot_base(ylim = switch(side, plain = c(0,1), c(0,0.25) ),
                                              ylab = switch(side, plain = "local cover", "plant mortality/growth" ),
-                                             xlab = switch(side, q = "local cover","vegetation cover"))
+                                             xlab = switch(side, q = "local cover","vegetation cover"), ...)
 
   # draw trajectories of mortality and growth
   output <- sim_trajectories(model = model, parms = parms, rho_1_ini = rho_1_ini, times = times, method = method)
@@ -75,21 +77,20 @@ plot_pairapproximation <- function(
 
   })
 
-  eq <- get_equilibria(model$pair, y = model$template, parms = parms, method = method, t_max = 130)
+  eq <- get_equilibria(y = model$template, func = model$pair, parms = parms, method = method, t_max = 130)
   rho_steady <- ini_rho(c(eq$lo[1],eq$hi[1]),c(eq$lo[2],eq$hi[2]))
   q_steady <- q_11(rho_steady)
   switch(side,
          rho = {
-           points(rho_steady$rho_1, rho_steady$rho_1*death(rho_steady, parms), xpd = TRUE, pch = 20, cex = 2)
+           points(rho_steady$rho_1, mortality(rho_steady, parms = parms), xpd = TRUE, pch = 20, cex = 2)
 
          },
          q = {
-           points(q_steady, rho_steady$rho_1*death(rho_steady, parms), xpd = TRUE, pch = 20, cex = 2)
+           points(q_steady, mortality(rho_steady, parms = parms), xpd = TRUE, pch = 20, cex = 2)
 
          },
          plain = {
            points(rho_steady$rho_1, q_steady, xpd = TRUE, pch = 20, cex = 2)
-
 
          }
 
