@@ -16,6 +16,7 @@
 #'
 plot_meanfield <- function(
   model,
+  func = model$meanfield,
   parms = model$parms,
   times = c(0,1000),
   method = "ode45",
@@ -31,7 +32,7 @@ plot_meanfield <- function(
     lines(rho_x, mortality(ini_rho(rho_x), parms), col = col[1], lwd = 2)
     lines(rho_x, growth(ini_rho(rho_x), parms), col = col[2], lwd = 2)
 
-    eq <- get_equilibria(y = model$template, func = model$meanfield, parms = parms)
+    eq <- get_equilibria(y = model$template, func = func, parms = parms)
 
     # draw points
     points(c(eq$lo[1],eq$hi[1]), growth(ini_rho(c(eq$lo[1],eq$hi[1]), c(eq$lo[1],eq$hi[1])), parms), xpd = TRUE, pch = 20, cex = 2)
