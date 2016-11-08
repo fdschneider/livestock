@@ -6,10 +6,10 @@
 #'   labels and limits. All graphical parameters can be set just as for plot().
 #' @export
 #'
-plot_base <- function(..., ylab = "plant mortality/growth", xlab = "vegetation cover", ylim= c(0,.25)) {
+plot_base <- function(..., ylab = "plant mortality/growth", xlab = "vegetation cover", ylim= c(0,.25), xlim = c(0,1)) {
   plot(NA,NA,
        ylab = ylab, xlab = xlab,
-       xlim = c(0,1), ylim= ylim,
+       xlim = xlim, ylim = ylim,
        bty = "n",
        xaxs = "i" , yaxs = "i",
        ...)

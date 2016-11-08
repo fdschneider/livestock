@@ -24,7 +24,9 @@
 #' registerDoSNOW(cl)
 #'
 #' p <- set_parms(livestock$parms, set = list(b = 0.3))
-#' plot_bifurcation(livestock, over = "L", xrange = c(0,3), parms = p)
+#' par(mfrow = c(1,2))
+#' plot_bifurcation(livestock, over = "L", res = 51, xrange = c(0,3), parms = p)
+#' plot_bifurcation(livestock, over = "L", res = 51, xrange = c(0,3), type = "plain", parms = p)
 #'
 #' stopCluster(cl)
 #'
@@ -33,24 +35,35 @@ plot_bifurcation <- function(
                       model,
                       parms = model$parms,
                       over = "b",
+                      type = "bifurcation",
                       xrange = c(0,1),
                       res = 201,
                       ini = c(0.9, 0.0001),
                       t_max = 150,
                       method = "ode45",
                       xlab = over,
-                      unstable = TRUE, 
+                      unstable = TRUE,
                       colors = c("#000000","#009933"),
-                      new = FALSE
+                      new = TRUE,
+                      ...
                     ) {
+
+  if(dev.cur() == 1 | new == TRUE) plot_base(ylim = c(0,1),
+                                             xlim = switch(type, plain = c(0,1), xrange),
+                                             ylab = switch(type, plain = "local cover", "vegetation cover" ),
+                                             xlab = switch(type, plain = "vegetation cover", xlab),
+                                             ...)
 
   equilibria <- sim_bifurcations(model, over = over, xrange = xrange, ini = ini, t_max = t_max, res = res, parms = parms, method = method)
 
-  plot(equilibria$rho_1 ~ equilibria[,over],
-       xlab = xlab, ylab = "vegetation cover",
-       pch = 20, cex = 0.66,
-       ylim = c(0,1))
-
+  if(type == "plain") {
+    abline(a = 0, b = 1, col = "gray50")
+    points(q_11(ini_rho(equilibria$rho_1, equilibria$rho_11)) ~ equilibria$rho_1,
+           pch = 20, cex = 0.66)
+  } else {
+    points(equilibria$rho_1 ~ equilibria[,over],
+           pch = 20, cex = 0.66)
+  }
 
   parms[[over]] <- seq(xrange[1],xrange[2],length = res)
   parms$rho_ini <- ini
@@ -62,7 +75,7 @@ plot_bifurcation <- function(
   iterations$L <- as.numeric(as.character(iterations$L))
 
   output_unstable <- NA
-  
+
   if(unstable) {
   # draw mean-field estimate of unstable equilibrium (threshold)
 
@@ -102,7 +115,20 @@ plot_bifurcation <- function(
   }
 
     output_unstable <- cbind(upper[,1:16],output_unstable)
-    points(output_unstable$rho_1~ output_unstable[,over], pch = 20, cex = 0.66, ylim = c(0,1), col = "grey60")
+
+
+    if(type == "plain") {
+      points(q_11(ini_rho(output_unstable$rho_1, output_unstable$rho_11)) ~ output_unstable$rho_1,
+             pch = 20, cex = 0.66,
+             col = "grey60")
+      abline(a = 0, b = 1)
+    } else {
+      points(output_unstable$rho_1 ~ output_unstable[,over],
+             pch = 20, cex = 0.66,
+             col = "grey60")
+
+    }
+
   }
     output <-  list(stable = equilibria, unstable = output_unstable)
   return(output)
