@@ -39,6 +39,7 @@ plot_bifurcation <- function(
                       t_max = 150,
                       method = "ode45",
                       xlab = over,
+                      unstable = TRUE, 
                       colors = c("#000000","#009933"),
                       new = FALSE
                     ) {
@@ -60,6 +61,9 @@ plot_bifurcation <- function(
   iterations$b <- as.numeric(as.character(iterations$b))
   iterations$L <- as.numeric(as.character(iterations$L))
 
+  output_unstable <- NA
+  
+  if(unstable) {
   # draw mean-field estimate of unstable equilibrium (threshold)
 
   upper <- equilibria[equilibria$rho_ini == ini[1],][which(round(equilibria[equilibria$rho_ini == ini[1],]$rho_1,4) != round(equilibria[equilibria$rho_ini == ini[2],]$rho_1,4)),]
@@ -99,7 +103,7 @@ plot_bifurcation <- function(
 
     output_unstable <- cbind(upper[,1:16],output_unstable)
     points(output_unstable$rho_1~ output_unstable[,over], pch = 20, cex = 0.66, ylim = c(0,1), col = "grey60")
-
+  }
     output <-  list(stable = equilibria, unstable = output_unstable)
   return(output)
 
