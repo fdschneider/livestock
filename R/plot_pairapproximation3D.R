@@ -23,7 +23,7 @@ plot_pairapproximation3D <- function(
   times = c(0,1000),
   method = "ode45",
   colors = c("#000000","#009933"),
-  meanfield = TRUE,
+  meanfield = FALSE,
   ...
 ) {
 
@@ -34,7 +34,7 @@ plot_pairapproximation3D <- function(
          xlim = c(0,1), ylim = c(0,1), zlim = c(0,0.25),
          xlab = "vegetation cover", ylab = "local vegetation cover", zlab = "growth/mortality",
          type = "n", box = TRUE, ...)
-  rgl.bg(fogtype = "exp2", fog = TRUE, color = "white")
+  rgl.bg(fogtype = "exp2", fog = TRUE, color = c("white", "black"))
 
 
   # draw trajectories of mortality and growth
@@ -59,15 +59,17 @@ plot_pairapproximation3D <- function(
   )
 
 
-  eq <- get_equilibria(model$pair, y = model$template, parms = parms, method = method, t_max = 130)
+  eq <- get_equilibria(y = model$template, func = model$pair,  parms = parms, method = method, t_max = 130)
 
   # draw points
   rho <- ini_rho(c(eq$lo[1], eq$hi[1]), c(eq$lo[2], eq$hi[2]))
+
   rgl.spheres(
     rho[[1]],
+    color = c("black"),
     q_11(rho),
     limit(rho[[1]]*death(rho, parms)),
-    radius = 0.01,
+    radius = 0.03,
     xpd = TRUE, pch = 20, cex = 2)
 
   if(meanfield == TRUE) {
