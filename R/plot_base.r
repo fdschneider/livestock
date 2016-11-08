@@ -2,7 +2,8 @@
 #'
 #' @param ...
 #'
-#' @return
+#' @return plots a blank coordinate system without content with predefined axis
+#'   labels and limits. All graphical parameters can be set just as for plot().
 #' @export
 #'
 plot_base <- function(..., ylab = "plant mortality/growth", xlab = "vegetation cover", ylim= c(0,.25)) {
