@@ -15,16 +15,16 @@
 #' @export
 #'
 #' @examples
-#'
+#' library(rgl)
 #' p <- set_parms(livestock$defparms, set = list(b = 0.9, c = 0.2, f = 0, p = 0, alpha = 0.2))
-#' plot_bifurcation(livestock, parms = p)
+#' plot_bifurcation3D(livestock, parms = p, res = 31)
 #'
-plot_bifurcation <- function(
+plot_bifurcation3D <- function(
                       model,
-                      parms = model$defparms,
+                      parms = model$parms,
                       over = "b",
                       xrange = c(0,1),
-                      res = 31,
+                      res = 21,
                       ini = c(0.9, 0.0001),
                       t_max = 150,
                       method = "ode45",
@@ -43,7 +43,7 @@ plot_bifurcation <- function(
 
   rgl.points(equilibria[,over],
              equilibria$rho_1,
-             q_11(equilibria$rho_1, equilibria$rho_11), color = "black", size = 8)
+             q_11(ini_rho(equilibria$rho_1, equilibria$rho_11)), color = "black", size = 8)
 
   parms[[over]] <- seq(xrange[1],xrange[2],length = res)
   parms$rho_ini <- ini
