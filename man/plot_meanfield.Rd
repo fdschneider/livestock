@@ -4,9 +4,9 @@
 \alias{plot_meanfield}
 \title{Draw meanfield model attractor}
 \usage{
-plot_meanfield(model, parms = model$parms, times = c(0, 1000),
-  method = "ode45", rho_x = seq(0, 1, length = 100), col = c("#000000",
-  "#009933"), new = FALSE)
+plot_meanfield(model, func = model$meanfield, parms = model$parms,
+  times = c(0, 1000), method = "ode45", rho_x = seq(0, 1, length = 100),
+  col = c("#000000", "#009933"), new = FALSE)
 }
 \arguments{
 \item{colors}{}

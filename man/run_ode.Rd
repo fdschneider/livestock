@@ -14,14 +14,14 @@ Title
 }
 \examples{
 p <- set_parms(livestock$parms, set = list(b = 0.2, f = 0.9, p = 0.99, v = 0.9))
-out <- run_ode(ini_rho(0.3,0.25), livestock$pair, parms = p)
+out <- run_ode(ini_rho(0.5), func = livestock$pair, parms = p)
 plot(out[,1:2], type = "l", ylim = c(0,1))
 
-out <- run_ode(ini_rho(0.5), livestock$meanfield, parms = p)
+out <- run_ode(ini_rho(0.3,0.25), livestock$meanfield, parms = p)
 lines(out[,1:2])
 
 library(caspr)
-l <- init_landscape(c("1","0"), c(0.6,0.4), 50)
+l <- init_landscape(c("1","0"), c(0.3,0.25), 50)
 r <- ca(l, model = livestock, t_max = 100, parms = p)
 lines(r$time, r$cover[[1]])
 }

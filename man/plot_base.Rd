@@ -5,10 +5,14 @@
 \title{Base plot of growth and mortality over vegetation cover}
 \usage{
 plot_base(..., ylab = "plant mortality/growth", xlab = "vegetation cover",
-  ylim = c(0, 0.25))
+  ylim = c(0, 0.25), xlim = c(0, 1))
 }
 \arguments{
 \item{...}{}
+}
+\value{
+plots a blank coordinate system without content with predefined axis
+  labels and limits. All graphical parameters can be set just as for plot().
 }
 \description{
 Base plot of growth and mortality over vegetation cover

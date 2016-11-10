@@ -6,6 +6,8 @@
 \usage{
 death(rho, parms)
 colonization(rho, parms)
+mortality(rho, parms)
+growth(rho, parms)
 }
 \description{
 title: Model definitions

@@ -4,10 +4,13 @@
 #'
 #' death(rho, parms)
 #' colonization(rho, parms)
+#' mortality(rho, parms)
+#' growth(rho, parms)
 #'
 #' @details defining chances of death and colonization per location, depending on the global and local vegetation cover.
 #'
 #' @export
+#'
 
 death <- function(rho, parms = livestock$parms) {
 

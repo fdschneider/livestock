@@ -17,7 +17,7 @@ Title
 \examples{
 library(rgl)
 p <- set_parms(livestock$defparms, set = list(b = 0.9, c = 0.2, f = 0, p = 0, alpha = 0.2))
-plot_bifurcation3D(livestock, parms = p)
+plot_bifurcation3D(livestock, parms = p, res = 31)
 
 }
 

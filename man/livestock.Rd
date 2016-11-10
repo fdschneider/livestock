@@ -4,7 +4,7 @@
 \name{livestock}
 \alias{livestock}
 \title{Livestock resilience model}
-\format{An object of class \code{ca_model} (inherits from \code{list}) of length 9.}
+\format{An object of class \code{ca_model} (inherits from \code{list}) of length 10.}
 \usage{
 library(livestock)
 
