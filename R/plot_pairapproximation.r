@@ -37,10 +37,14 @@ plot_pairapproximation <- function(
                                              xlab = switch(side, q = "local cover","vegetation cover"), ...)
 
   # draw trajectories of mortality and growth
-  output <- sim_trajectories(model = model, parms = parms, rho_1_ini = rho_1_ini, times = times, method = method)
+  if(class(model) == "attractor") {
+    trajectories <- model$trajectories
+  } else {
+    trajectories <- sim_trajectories(model = model, parms = parms, rho_1_ini = rho_1_ini, times = times, method = method)
+  }
 
   # visualize trajectories to the attractor
-  sapply(output, function(x){
+  sapply(trajectories, function(x){
     rho <- ini_rho(x$rho_1, x$rho_11)
     mort <- limit(mortality(rho, parms))
     grow <- limit(growth(rho, parms))
@@ -75,10 +79,17 @@ plot_pairapproximation <- function(
     )
 
 
-  })
+  }
+  )
 
-  eq <- get_equilibria(y = model$template, func = model$pair, parms = parms, method = method, t_max = 130)
-  rho_steady <- ini_rho(c(eq$lo[1],eq$hi[1]),c(eq$lo[2],eq$hi[2]))
+
+  if(class(model) == "attractor") {
+    eq <- model$eq
+  } else {
+    eq <- get_equilibria(y = model$template, func = model$pair, parms = parms, method = method, t_max = 130)
+  }
+
+    rho_steady <- ini_rho(c(eq$lo[1],eq$hi[1]),c(eq$lo[2],eq$hi[2]))
   q_steady <- q_11(rho_steady)
   switch(side,
          rho = {
@@ -97,8 +108,11 @@ plot_pairapproximation <- function(
   )
 
 
-
-
+  output <- list(trajectories = trajectories,
+                 eq = eq
+                 )
+  class(output) <- "attractor"
+  return(output)
 
 }
 
