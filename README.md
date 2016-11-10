@@ -1,6 +1,6 @@
 # livestock model package
 
-This R package includes code for a paper on spatial indicators of land degradation authored by Florian Schneider and Sonia Kéfi. 
+This R package includes code for a paper on spatial indicators of land degradation authored by Florian Schneider and Sonia Kéfi. The repository of the study can be found at: https://github.com/cascade-wp6/resilience_rangelands
 
 ## model theory
 
