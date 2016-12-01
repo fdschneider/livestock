@@ -2,35 +2,16 @@
 title: "Model description"
 author: "Florian D. Schneider"
 date: "December 1st, 2016"
-output:
-  pdf_document:
-    fig_height: 4
-    fig_width: 6
-  html_document:
-    keep_md: yes
+output: 
+  pdf_document: default
+  output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{livestock resilience model}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
 fontsize: 12pt
-geometry: margin=1.4in
+geometry: margin=1.5in
 ---
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
-
-# provides parallel backend
-library(foreach)
-library(doSNOW)
-
-workstation <-  list(host = "162.38.184.118", user = "florian",
-                     rscript = "/usr/lib/R/bin/Rscript",
-                     snowlib = "/usr/lib/R/library")
-
-workerlist <- c(rep("localhost", times = 7)) 
-
-cl <- makeSOCKcluster(workerlist,  outfile='out_messages.txt')
-
-registerDoSNOW(cl)
-
-
-```
-
 
 
 We implement the equations for plant mortality and growth outlined above in a pair-approximation model of a spatially-explicit cellular automata framework. We contrast this to a model that does not account for spatial structure and assumes that the local neighborhood cover of plants is equal to the global vegetation cover, i.e. a mean field model. 
