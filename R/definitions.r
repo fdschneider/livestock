@@ -43,7 +43,7 @@ colonization <- function(rho, parms = livestock$parms)  {
 
   # substitutions
   b = parms$b + (1- parms$b) * parms$f * q_01(rho)  # facilitation
-  r = parms$r * rho[[1]]^parms$alpha   # water runoff
+  r = parms$r * rho[[1]]^parms$alpha   # water runoff (not discussed)
   K = parms$K *  (1 - parms$c * q_01(rho))
 
   # individual colonization rate

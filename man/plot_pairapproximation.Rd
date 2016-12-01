@@ -17,8 +17,9 @@ Draw meanfield model attractor
 }
 \examples{
 
-p <- set_parms(livestock$parms, set = list(b = 0.1, f = 0.9, p = 0.99))
-plot_pairapproximation(livestock, parms = p)
-plot_pairapproximation(livestock, parms = p, side = "plain")
+p <- set_parms(livestock$parms, set = list(b = 0.1, f = 0.5, p = 0.9, L = 1.5))
+par(mfrow = c(1,2))
+plot_pairapproximation(livestock, parms = p) -> out
+plot_pairapproximation(out, parms = p, side = "plain")
 }
 
